@@ -7,7 +7,7 @@ resource "aws_eks_cluster" "devops_eks_cluster" {
       aws_subnet.eks_public_subnet_a.id,
       aws_subnet.eks_public_subnet_b.id,
       aws_subnet.eks_private_subnet_a.id,
-      aws_subnet.ek_private_subnet_b.id
+      aws_subnet.eks_private_subnet_b.id
     ]
 
     endpoint_public_access  = true

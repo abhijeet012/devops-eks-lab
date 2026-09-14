@@ -31,7 +31,7 @@ resource "aws_subnet" "eks_private_subnet_a" {
   }
 }
 
-resource "aws_subnet" "ek_private_subnet_b" {
+resource "aws_subnet" "eks_private_subnet_b" {
   vpc_id            = aws_vpc.eks_vpc.id
   cidr_block        = "10.0.12.0/24"
   availability_zone = data.aws_availability_zones.available.names[1]
