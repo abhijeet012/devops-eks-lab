@@ -46,6 +46,7 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 sh '''
+                    kubectl rollout status deployment/demo-app --timeout=120s
                     kubectl get pods
                     kubectl get svc
                     helm list
