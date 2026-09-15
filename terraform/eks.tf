@@ -39,3 +39,19 @@ resource "aws_eks_access_policy_association" "eksuser_admin_access" {
     type = "cluster"
   }
 }
+
+resource "aws_eks_access_entry" "jenkins_access" {
+  cluster_name  = aws_eks_cluster.devops_eks_cluster.name
+  principal_arn = aws_iam_role.jenkins_role.arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "jenkins_admin_access" {
+  cluster_name  = aws_eks_cluster.devops_eks_cluster.name
+  principal_arn = aws_iam_role.jenkins_role.arn
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+  access_scope {
+    type = "cluster"
+  }
+}

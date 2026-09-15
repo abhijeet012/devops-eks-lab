@@ -95,3 +95,24 @@ resource "aws_iam_instance_profile" "jenkins_instance_profile" {
   name = "devops-jenkins-instance-profile"
   role = aws_iam_role.jenkins_role.name
 }
+
+resource "aws_iam_role_policy" "jenkins_eks_describe" {
+  name = "devops-jenkins-eks-describe"
+  role = aws_iam_role.jenkins_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "eks:DescribeCluster"
+        ]
+
+        Resource = aws_eks_cluster.devops_eks_cluster.arn
+      }
+    ]
+  })
+}
