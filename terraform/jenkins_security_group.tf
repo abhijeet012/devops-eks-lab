@@ -27,6 +27,14 @@ resource "aws_security_group" "jenkins_security_group" {
     cidr_blocks = ["203.145.57.114/32"]
   }
 
+  ingress {
+    description = "GitHub webhook"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     description = "Allow outbound traffic"
     from_port   = 0
