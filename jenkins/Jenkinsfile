@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'ap-south-1'
+        EKS_CLUSTER = 'devops-eks-cluster'
+        HELM_CHART = './kubernetes/helm/demo-app'
+        RELEASE_NAME = 'demo-app'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Configure EKS Access') {
+            steps {
+                sh '''
+                    aws eks update-kubeconfig \
+                      --region ${AWS_REGION} \
+                      --name ${EKS_CLUSTER}
+                '''
+            }
+        }
+
+        stage('Validate Helm Chart') {
+            steps {
+                sh '''
+                    helm lint ${HELM_CHART}
+                    helm template ${RELEASE_NAME} ${HELM_CHART}
+                '''
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh '''
+                    helm upgrade --install ${RELEASE_NAME} ${HELM_CHART}
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                    kubectl get pods
+                    kubectl get svc
+                    helm list
+                '''
+            }
+        }
+    }
+}
